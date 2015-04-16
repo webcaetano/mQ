@@ -1,6 +1,8 @@
 # mQ.php
 
-simple PHP SQL class
+simple PHP SQL functions
+
+## Documentation
 
 config.php - credencials file
 mQ.php - main file
