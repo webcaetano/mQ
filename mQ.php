@@ -15,6 +15,10 @@ function mAr($sql,$t='L'){
 	}
 }
 
+function test(){
+	echo 'test';
+}
+
 function mQ($sql,$error=false){$x=mysql_query($sql)or die(($error ? mysql_error() : $sql.'_'.mysql_error())); return $x;}
 function mNum($sql){return mysql_num_rows($sql);}
 function mQN($sql){return mNum(mQ($sql));}
