@@ -38,5 +38,3 @@ $id = mIns('players',['name="TheOddOne"','team="TSM"']);
 echo $id;
 # 2  // return row insertion index
 ```
-
-testzzz
