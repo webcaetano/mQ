@@ -1,4 +1,10 @@
 <?php
+/**
+ * v1.0.1
+ * Copyright (c) 2015 Andre Caetano
+ * mQ.php is open sourced under the MIT license.
+ */
+
 function connect($db=null){
 	require 'config.php';
 	$db=(!$db ? $config['DB']['db'] : $db);
