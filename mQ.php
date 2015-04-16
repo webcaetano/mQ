@@ -15,8 +15,8 @@ function mAr($sql,$t='L'){
 	}
 }
 
-function test(){
-	echo 'test';
+function someTest(){
+	echo 'bola';
 }
 
 function mQ($sql,$error=false){$x=mysql_query($sql)or die(($error ? mysql_error() : $sql.'_'.mysql_error())); return $x;}
