@@ -2,16 +2,39 @@
 
 simple PHP SQL class
 
+config.php - credencials file
+mQ.php - main file
 
-example 1:
+- [connect](#connect)
+- [mQ](#mQ)
+- [mIns](#mIns)
+
+### connect
+
+Connect to database.
+
 ```php
-mQ('SELECT * FROM players WHERE 1');
+connect('players');
 ```
 
 
-example 2:
+### mQ
+
+Run SQL command.
+
 ```php
-$id = mIns('players',['name="TheOddOne"']);
+mQ('SELECT * FROM players WHERE 1');
+``` 
+
+### mIns
+
+Insert mySql row and return row index.
+mIns(table,cols)
+
+```php
+mIns('players','name="Polt"');
+
+$id = mIns('players',['name="TheOddOne"','team="TSM"']);
 echo $id;
-# 1  // return row insertion index
+# 2  // return row insertion index
 ```
