@@ -6,8 +6,9 @@ config.php - credencials file
 mQ.php - main file
 
 - [connect](#connect)
-- [mQ](#mQ)
-- [mIns](#mIns)
+- [mQ](#
+)
+- [mIns](#mins)
 
 ### connect
 
