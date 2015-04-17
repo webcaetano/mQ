@@ -25,7 +25,7 @@ connect('players');
 
 ### mQ
 
-Run SQL command.
+Run SQL command. 
 mQ(sql)
 
 ```php
@@ -34,7 +34,7 @@ mQ('SELECT * FROM players WHERE 1');
 
 ### mIns
 
-Insert mySql row and return row index.
+Insert mySql row and return row index. 
 mIns(table,cols)
 
 ```php
@@ -48,7 +48,7 @@ echo $id;
 
 ### mNum
 
-Return num of rows in a query
+Return num of rows in a query. 
 mNum(query)
 
 ```php
@@ -64,7 +64,7 @@ echo mNum(mQ('SELECT * FROM players '));
 
 ### mQN
 
-Run command and return num of rows in this query
+Run command and return num of rows in this query 
 mQN(sql)
 
 ```php
