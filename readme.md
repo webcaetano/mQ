@@ -3,6 +3,10 @@
 simple PHP SQL functions
 and JSON results convert 
 
+- [x] Open the code.
+- [ ] Finish documentation.
+- [ ] Create Subgroups results on SELECT
+
 ## Documentation
 
 config.php - credencials file
