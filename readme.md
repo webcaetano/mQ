@@ -35,9 +35,9 @@ Insert mySql row and return row index.
 mIns(table,cols)
 
 ```php
-mIns('players','name="Polt"');
+mIns('players','name="Polt"'); // runs INSERT INTO players set name="Polt"
 
-$id = mIns('players',['name="TheOddOne"','team="TSM"']);
+$id = mIns('players',['name="TheOddOne"','team="TSM"']); // runs INSERT INTO players set name="TheOddOne", team="TSM"
 echo $id;
 # 2  // return row insertion index
 ```
