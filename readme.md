@@ -1,10 +1,10 @@
 # mQ.php
 
 simple PHP SQL functions
-and JSON results convert 
+and JSON results convert
 
 - [x] Open the code.
-- [ ] Finish documentation.
+- [x] Finish documentation.
 - [ ] Create Subgroups results on SELECT
 
 ## Documentation
@@ -15,6 +15,7 @@ mQ.php - main file
 - [connect](#connect)
 - [mIns](#mins)
 - [mQ](#mq)
+- [mSel](#msel)
 - [mRow](#mrow)
 - [mRows](#mrows)
 - [mDel](#mdel)
@@ -23,6 +24,8 @@ mQ.php - main file
 - [mNum](#mnum)
 - [mQN](#mqn)
 - [oV](#ov)
+- [sql2JSON](#sql2json)
+- [_json](#_json)
 
 ### connect
 
@@ -34,7 +37,7 @@ connect('players');
 
 ### mIns
 
-Insert mySql row and return row index. 
+Insert SQL row and return row index.
 
 mIns(table,cols)
 
@@ -48,24 +51,50 @@ echo $id;
 
 ### mQ
 
-Run SQL command. 
+Run SQL command.
 
 mQ(sql)
 
 ```php
 mQ('SELECT * FROM players WHERE 1');
-``` 
+```
+
+### mSel
+
+Run a [mRows](#mrows) command based on a object
+
+mSel(data)
+
+```php
+// Each attribute from object could be Array or string
+
+mSel([
+	"cols"=>['name','team'],
+	"table"=>"players",
+	"where"=>['name="Polt"','team="TSM"'],
+	"group"=>"name",
+	"limit"=>"0,1",
+	"order"=>"name DESC"
+]);
+//  Return mRows('
+//	SELECT name,team
+//	FROM players
+//	WHERE name="Polt" and team="TSM"
+//	GROUP BY name
+//	ORDER BY limit 0,1
+//	');
+```
 
 ### mRow
 
-Return a single row SQL result 
+Return a single row SQL result
 
 mRow(query)
 
 
 ```php
 $row1 = mRow('SELECT * FROM players WHERE 1');
-``` 
+```
 
 ### mRows
 
@@ -89,7 +118,7 @@ mDel(table,where)
 ```php
 mDel('players',['name="TheOddOne"','team="TSM"']); // runs DELETE FROM players WHERE name="TheOddOne" and team="TSM"
 
-or 
+or
 
 mDel('players','1'); // runs DELETE FROM players WHERE 1
 ```
@@ -111,18 +140,18 @@ mSet('players',['name="TheOddOne"','team="TSM"'],'team=""'); // runs UPDATE play
 
 ### mAr
 
-Turns SQL query and return the next row. 
+Turns SQL query and return the next row.
 
 mAr(query)
 
 
 ```php
 $row1 = mAr(mQ('SELECT * FROM players WHERE 1'));
-``` 
+```
 
 ### mNum
 
-Return num of rows in a query. 
+Return num of rows in a query.
 
 mNum(query)
 
@@ -131,7 +160,7 @@ $sql = mQ('SELECT * FROM players ');
 echo mNum($sql);
 // 2
 
-or 
+or
 
 echo mNum(mQ('SELECT * FROM players '));
 //2
@@ -160,3 +189,32 @@ oV(sql)
 echo oV('SELECT name FROM players Limit 0,1');
 //Polt
 ```
+
+### sql2JSON
+Runs SQL and Parse Array result values to utf8 and return a JSON string
+
+sql2JSON(SQL)
+
+```php
+echo sql2JSON('SELECT name FROM players Limit 0,1');
+//{"name":"Polt"}
+
+or
+
+_sql2JSON('SELECT name FROM players Limit 0,1');
+// same as sql2JSON but auto "echo"
+// {"name":"Polt"}
+```
+
+### _json
+Parse Array result values to utf8 and return a JSON string
+
+sql2JSON(array)
+
+```php
+echo _json(["name"=>"Polt"]);
+// {"name":"Polt"}
+```
+
+------------------
+LICENSE: MIT

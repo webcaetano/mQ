@@ -1,6 +1,6 @@
 <?php
 /**
- * v1.0.1
+ * v1.0.2
  * Copyright (c) 2015 Andre Caetano
  * mQ.php is open sourced under the MIT license.
  */
@@ -51,13 +51,19 @@ function treatCols(&$cols){
 }
 
 function mIns($table,$cols,$getLast=false){
-	// treatCols($cols);	
 	mQ('INSERT INTO '.$table.' SET '.implode(', ', $cols));
 	if($getLast) return oV('SELECT last_Insert_Id() FROM '.$table);
 }
 
+function quotes($str){
+	if (is_numeric($str)){
+		return intval($str);
+	}else{
+		return "'".addslashes($str)."'";
+	}
+}
+
 function mDel($table,$where){
-	//_escape($where);
 	mQ('DELETE FROM '.$table.' WHERE '.implode(' and ', $where));
 }
 
@@ -83,22 +89,20 @@ function mSel($data=Array(),$utf8=true){
 	$group=(isset($data['group']) ? $data['group'] : Array());
 	$order=(isset($data['order']) ? $data['order'] : Array());
 	$have=(isset($data['have']) ? $data['have'] : Array());
-	//treatCols($cols);
 
 	return mRows('SELECT '.(gettype($cols)=='array' ? implode(', ', $cols) : $cols).' '.
 	'FROM '.(gettype($from)=='array' ? implode(', ', $from) : $from).' '.
 	'WHERE '.(gettype($where)=='array' ? implode(' and ', $where) : $where).' '.
-	(count($group)>0 ? "GROUP BY " : '').implode(", ",$group).' '.
+	(count($group)>0 ? "GROUP BY " : '').(gettype($group)=='array' ? implode(", ",$group) : $group).' '.
 	(count($have)>0 ? "HAVING " : '').implode(" and ",$have).' '. 
 	(count($order)>0 ? 'ORDER BY ' : '').implode(", ",$order).' '.
 	(isset($data['limit']) && (gettype($data['limit'])=='string' || (gettype($data['limit'])=='array' && $data['limit'][1]>0)) ? 
 		'LIMIT '.(gettype($data['limit'])=='array' ? implode(', ', $data['limit']) : $data['limit']) 
 	: '' )
-	,$utf8);
+	,'L',$utf8);
 }
 
 function mSet($table,$set,$where=''){
-	//_escape($where);
 	$sql='UPDATE '.(gettype($table)=='array' ? implode(', ', $table) : $table).
 	' SET '.(gettype($set)=='array' ? implode(', ', $set) : $set).
 	($where=='' ?
