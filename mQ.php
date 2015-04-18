@@ -26,7 +26,7 @@ function mNum($sql){return mysql_num_rows($sql);}
 function mQN($sql){return mNum(mQ($sql));}
 function oV($sql,$utf8=false){ $x=mysql_fetch_row(mQ($sql)); return ($utf8 ? utf8($x[0]) : $x[0]);}
 function mRow($sql,$t='L',$utf8=false){
-	$resp = Array();
+	$resp = [];
 	if(!$utf8){
 		$resp=mAr(mQ($sql),$t);
 	} else {
@@ -36,7 +36,7 @@ function mRow($sql,$t='L',$utf8=false){
 }
 function mRows($sql,$t='L',$utf8=false){
 	$sql=mQ($sql,$utf8);
-	$resp=Array();
+	$resp=[];
 
 	if($utf8){
 		while ($data=mAr($sql,$t)) $resp[]=$data;
@@ -68,7 +68,7 @@ function mDel($table,$where){
 }
 
 function _mSel($cols=null,$table=null,$where=null,$group=null,$order=null,$limit=null,$utf8=true){
-	$sql=Array();
+	$sql=[];
 	if($cols) $sql['cols']=$cols;
 	if($table) $sql['table']=$table;
 	if($where) $sql['where']=$where;
@@ -79,16 +79,16 @@ function _mSel($cols=null,$table=null,$where=null,$group=null,$order=null,$limit
 	return mSel($sql,$utf8);
 }
 
-function mSel($data=Array(),$utf8=true){
-	$resp=Array();
+function mSel($data=[],$utf8=true){
+	$resp=[];
 
 	$where=$data['where'];
 	$from=$data['from'];
 	$cols=$data['cols'];
 
-	$group=(isset($data['group']) ? $data['group'] : Array());
-	$order=(isset($data['order']) ? $data['order'] : Array());
-	$have=(isset($data['have']) ? $data['have'] : Array());
+	$group=(isset($data['group']) ? $data['group'] : []);
+	$order=(isset($data['order']) ? $data['order'] : []);
+	$have=(isset($data['have']) ? $data['have'] : []);
 
 	return mRows('SELECT '.(gettype($cols)=='array' ? implode(', ', $cols) : $cols).' '.
 	'FROM '.(gettype($from)=='array' ? implode(', ', $from) : $from).' '.
@@ -118,7 +118,7 @@ function mSet($table,$set,$where=''){
 
 function mIU($table,$cols){
 	if(!count($cols)) return;
-	$cols = array_map('mysql_real_escape_string', $cols); $cv=Array();
+	$cols = array_map('mysql_real_escape_string', $cols); $cv=[];
 	foreach ($cols as $i => $val) $cv[]="`".$i."`='".$val."'";
 	mQ('INSERT INTO '.$table.' (`'.join('`, `', array_keys($cols)).'`) 
 	SELECT "'.join('", "', $cols).'" FROM DUAL 
@@ -132,7 +132,7 @@ function _json($data){
 
 function sql2JSON($sql,$toArray=true,$onlyRow=false){
 	$data=mQ($sql);
-	$rows=Array();
+	$rows=[];
 	if(mNum($data)==0) return '';
 	if(!$toArray) return _json(mAr($data));
 
