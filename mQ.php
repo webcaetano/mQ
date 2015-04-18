@@ -1,11 +1,9 @@
 <?php
 /**
- * v1.0.3
+ * v1.1.0
  * Copyright (c) 2015 Andre Caetano
  * mQ.php is open sourced under the MIT license.
- * Author Andre Caetano
  */
-
 function connect($db=null){
 	require 'config.php';
 	$db=(!$db ? $config['DB']['db'] : $db);
@@ -51,9 +49,49 @@ function treatCols(&$cols){
 	foreach ($cols as $i => $v) $cols[$i]=$i.'='.quotes($v);
 }
 
-function mIns($table,$cols,$getLast=false){
-	mQ('INSERT INTO '.$table.' SET '.implode(', ', $cols));
+function mIns($table,$set,$getLast=false){
+	$sql = [
+		'INSERT INTO '.countAdd('',strToArr($table),', '),
+		'SET '.countAdd('',strToArr($set),', ')
+	];
+
+	mQ(implode(" ",$sql));
 	if($getLast) return oV('SELECT last_Insert_Id() FROM '.$table);
+}
+
+
+function mDel($table,$where){
+	$sql = [
+		'DELETE FROM '.countAdd('',strToArr($table),', '),
+		countAdd('WHERE',strToArr($where),' and ')
+	];
+	mQ(implode(" ",$sql));
+}
+
+function mSel($data=[],$utf8=true){
+	$sql=[];
+	$attrs = [
+		'cols'=>['head'=>'SELECT','separator'=>', '],
+		'from'=>['head'=>'FROM','separator'=>', '],
+		'where'=>['head'=>'WHERE','separator'=>' and '],
+		'group'=>['head'=>'GROUP BY','separator'=>', '],
+		'have'=>['head'=>'HAVING','separator'=>' and '],
+		'order'=>['head'=>'ORDER BY','separator'=>', '],
+		'limit'=>['head'=>'LIMIT','separator'=>', ']
+	];
+	foreach ($attrs as $k => $val) if(isset($data[$k])) pushNotEmpty($sql,countAdd($attrs[$k]['head'],strToArr($data[$k]),$attrs[$k]['separator']));
+	
+	return mRows(implode(" ",$sql),'L',$utf8);
+}
+
+function mSet($table,$set,$where=null){	
+	$sql = [
+		'UPDATE '.countAdd('',strToArr($table),', '),
+		'SET '.countAdd('',strToArr($set),', ')
+	];
+	pushNotEmpty($sql,countAdd('WHERE',strToArr($where),' and '));
+
+	mQ(implode(" ",$sql));
 }
 
 function quotes($str){
@@ -64,57 +102,20 @@ function quotes($str){
 	}
 }
 
-function mDel($table,$where){
-	mQ('DELETE FROM '.$table.' WHERE '.implode(' and ', $where));
+
+function strToArr($var){
+	if(!$var) return [];
+	if(!is_array($var)) return [$var];
+	return $var;
 }
 
-function _mSel($cols=null,$table=null,$where=null,$group=null,$order=null,$limit=null,$utf8=true){
-	$sql=[];
-	if($cols) $sql['cols']=$cols;
-	if($table) $sql['table']=$table;
-	if($where) $sql['where']=$where;
-	if($group) $sql['group']=$group;
-	if($order) $sql['order']=$order;
-	if($limit) $sql['limit']=$limit;
-
-	return mSel($sql,$utf8);
+function countAdd($head,$arr,$separator){
+	if(!count($arr)) return '';
+	return ($head ? $head.' ' : '').implode($arr,$separator);
 }
 
-function mSel($data=[],$utf8=true){
-	$resp=[];
-
-	$where=$data['where'];
-	$from=$data['from'];
-	$cols=$data['cols'];
-
-	$group=(isset($data['group']) ? $data['group'] : []);
-	$order=(isset($data['order']) ? $data['order'] : []);
-	$have=(isset($data['have']) ? $data['have'] : []);
-
-	return mRows('SELECT '.(gettype($cols)=='array' ? implode(', ', $cols) : $cols).' '.
-	'FROM '.(gettype($from)=='array' ? implode(', ', $from) : $from).' '.
-	'WHERE '.(gettype($where)=='array' ? implode(' and ', $where) : $where).' '.
-	(count($group)>0 ? "GROUP BY " : '').(gettype($group)=='array' ? implode(", ",$group) : $group).' '.
-	(count($have)>0 ? "HAVING " : '').implode(" and ",$have).' '. 
-	(count($order)>0 ? 'ORDER BY ' : '').implode(", ",$order).' '.
-	(isset($data['limit']) && (gettype($data['limit'])=='string' || (gettype($data['limit'])=='array' && $data['limit'][1]>0)) ? 
-		'LIMIT '.(gettype($data['limit'])=='array' ? implode(', ', $data['limit']) : $data['limit']) 
-	: '' )
-	,'L',$utf8);
-}
-
-function mSet($table,$set,$where=''){
-	$sql='UPDATE '.(gettype($table)=='array' ? implode(', ', $table) : $table).
-	' SET '.(gettype($set)=='array' ? implode(', ', $set) : $set).
-	($where=='' ?
-		''
-		:
-		' WHERE '.(gettype($where)=='array' ? implode(' and ', $where) : $where)
-	);
-
-	mQ($sql);
-
-	return $sql;
+function pushNotEmpty(&$arr,$val){
+	if(count($val) && $val) $arr[]=$val;
 }
 
 function mIU($table,$cols){
