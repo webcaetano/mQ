@@ -1,8 +1,9 @@
 <?php
 /**
- * v1.0.2
+ * v1.0.3
  * Copyright (c) 2015 Andre Caetano
  * mQ.php is open sourced under the MIT license.
+ * Author Andre Caetano
  */
 
 function connect($db=null){
