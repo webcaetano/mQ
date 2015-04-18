@@ -1,4 +1,4 @@
-# mQ.php
+# ![mQ.php logo](http://i.imgur.com/EEATbXj.png)
 
 simple PHP SQL functions
 and JSON results convert
