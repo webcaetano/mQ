@@ -32,7 +32,7 @@ mQ.php - main file
 Connect to database.
 
 ```php
-connect('players');
+connect('gamedb');
 ```
 
 ### mIns
