@@ -5,6 +5,7 @@ and JSON results convert
 
 - [x] Open the code.
 - [x] Finish documentation.
+- [ ] Add it to composer.
 - [ ] Create Subgroups results on SELECT
 
 ## Documentation
